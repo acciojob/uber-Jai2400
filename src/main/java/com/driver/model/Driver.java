@@ -3,33 +3,14 @@ package com.driver.model;
 import javax.persistence.*;
 import java.util.List;
 
-@Entity
-@Table(name = "driver")
 public class Driver {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int driverId;
     private String mobile;
-    private  String password;
-
-
-
-    @OneToOne
-    @JoinColumn
-    private  Cab cab;
-
-    // trip +++++
-    private List<TripBooking> tripBookingList;
+    private String password;
 
     public Driver() {
-    }
-
-    public Driver(int driverId, String mobile, String password, Cab cab, List<TripBooking> tripBookingList) {
-        this.driverId = driverId;
-        this.mobile = mobile;
-        this.password = password;
-        this.cab = cab;
-        this.tripBookingList = tripBookingList;
     }
 
     public int getDriverId() {
@@ -56,6 +37,14 @@ public class Driver {
         this.password = password;
     }
 
+    public Driver(String mobile, String password) {
+        this.mobile = mobile;
+        this.password = password;
+    }
+
+    @OneToOne(mappedBy = "driver", cascade = CascadeType.ALL)
+    private Cab cab;
+
     public Cab getCab() {
         return cab;
     }
@@ -63,6 +52,9 @@ public class Driver {
     public void setCab(Cab cab) {
         this.cab = cab;
     }
+
+    @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
+    private List<TripBooking> tripBookingList;
 
     public List<TripBooking> getTripBookingList() {
         return tripBookingList;
